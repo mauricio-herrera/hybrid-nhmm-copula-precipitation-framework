@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+title: "Hybrid Hidden Markov–Copula Precipitation Framework"
+message: "If you use this repository, please cite it as follows."
+type: software
+authors:
+  - family-names: Herrera-Marín
+    given-names: Mauricio
+repository-code: "https://github.com/mauricio-herrera/hybrid-nhmm-copula-precipitation-framework"
+abstract: >
+  Hierarchical framework integrating non-homogeneous Hidden Markov Models (nHMM),
+  Dynamic Time Warping (DTW) clustering, and state-conditional Regular Vine (R-vine)
+  copulas with Generalized Pareto (GPD) tails to characterize and simulate Chilean
+  rainfall regimes (1980–2022). This repository includes compressed data, scripts,
+  and reproducible diagnostics supporting the manuscript "Characterizing Climate-Driven
+  Shifts in Chilean Rainfall Regimes with a Hybrid Hidden Markov–Copula Framework."
+license: MIT
+keywords:
+  - nHMM
+  - DTW
+  - vine copulas
+  - GPD
+  - precipitation
+  - Chile
+  - rainfall regimes
+  - hydroclimate
+version: "1.0.0"
+date-released: "2025-11-08"

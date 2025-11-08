@@ -1,0 +1,24 @@
+cat > .gitignore <<'EOF'
+# R / Datos pesados
+*.csv
+*.rds
+*.RData
+*.rda
+*.feather
+*.parquet
+
+# Permitimos explícitamente el zip de Data (34 MB) y figuras exportadas
+!Data/mapa_estaciones_precipitaciones_clean.csv.zip
+fig_main/
+fig_supp/
+
+# macOS/IDE
+.DS_Store
+.Rproj.user/
+.Rhistory
+.Rproj.user/
+.Ruserdata
+.idea/
+.vscode/
+__pycache__/
+EOF
