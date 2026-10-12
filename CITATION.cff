@@ -1,27 +1,28 @@
 cff-version: 1.2.0
+message: "If you use this software, please cite the archived version and acknowledge the underlying CR2MET data product."
 title: "Hybrid Hidden Markov–Copula Precipitation Framework"
-message: "If you use this repository, please cite it as follows."
 type: software
 authors:
-  - family-names: Herrera-Marín
-    given-names: Mauricio
-repository-code: "https://github.com/mauricio-herrera/hybrid-nhmm-copula-precipitation-framework"
-abstract: >
-  Hierarchical framework integrating non-homogeneous Hidden Markov Models (nHMM),
-  Dynamic Time Warping (DTW) clustering, and state-conditional Regular Vine (R-vine)
-  copulas with Generalized Pareto (GPD) tails to characterize and simulate Chilean
-  rainfall regimes (1980–2022). This repository includes compressed data, scripts,
-  and reproducible diagnostics supporting the manuscript "Characterizing Climate-Driven
-  Shifts in Chilean Rainfall Regimes with a Hybrid Hidden Markov–Copula Framework."
-license: MIT
+  - family-names: "Herrera-Marín"
+    given-names: "Mauricio"
+    affiliation: "Universidad del Desarrollo"
+abstract: >-
+  Research code and a compressed derived precipitation dataset supporting
+  evaluation of a hybrid non-homogeneous Hidden Markov Model (nHMM),
+  Dynamic Time Warping (DTW) zones, state-conditional regular vine copulas,
+  and Generalized Pareto (GPD) tails for Chilean rainfall regimes.
+  Includes an R simulation and validation script for May–August 2022
+  based on processed historical inputs.
 keywords:
-  - nHMM
-  - DTW
-  - vine copulas
-  - GPD
   - precipitation
   - Chile
-  - rainfall regimes
+  - non-homogeneous Hidden Markov models
+  - vine copulas
+  - extreme precipitation
+  - stochastic weather simulation
   - hydroclimate
+repository-code: "https://github.com/mauricio-herrera/hybrid-nhmm-copula-precipitation-framework"
+url: "https://github.com/mauricio-herrera/hybrid-nhmm-copula-precipitation-framework"
+license: MIT
 version: "1.0.0"
-date-released: "2025-11-08"
+date-released: "2026-10-12"
