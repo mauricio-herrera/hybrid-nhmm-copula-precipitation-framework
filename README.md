@@ -1,143 +1,91 @@
 # Hybrid Hidden Markov–Copula Framework for Chilean Rainfall (1980–2022)
 
-**Repository purpose.** This repository provides data (compressed) and R scripts to reproduce the analyses and figures of the manuscript:
+Research software and processed precipitation input for the manuscript:
 
-> **“Characterizing Climate-Driven Shifts in Chilean Rainfall Regimes with a Hybrid Hidden Markov–Copula Framework.”**
+> **Characterizing Climate-Driven Shifts in Chilean Rainfall Regimes with a Hybrid Hidden Markov–Copula Framework**
 
-It satisfies journal reproducibility requirements by bundling: (i) a compressed dataset; (ii) self-contained R scripts; and (iii) clear instructions to configure file paths, run simulations for 2022 (MJJA), and export figures/tables.
+This repository provides an R implementation for state-conditional precipitation simulation and out-of-sample validation during May–August 2022. The scientific framework couples non-homogeneous Hidden Markov Model (nHMM) precipitation regimes, Dynamic Time Warping (DTW) climatic zones, zero-inflated empirical/GPD station margins, and regular vine copulas.
 
----
+**Release status:** prepared for GitHub/Zenodo release **v1.0.0**. A DOI will be added here **after** the first GitHub release has been archived by Zenodo; no DOI has been assigned to this repository yet.
 
-## Abstract (from the manuscript)
+## Reproducibility scope
 
-Chile’s hydroclimate exhibits pronounced meridional gradients and strong interannual variability, posing persistent challenges for regime-aware, probabilistic rainfall prediction. We introduce a hierarchical framework that explicitly separates large-scale regime dynamics from local spatial dependence. The approach integrates: (i) a covariate-driven non-homogeneous Hidden Markov Model (nHMM) to learn synoptic precipitation regimes and their transitions; (ii) Dynamic Time Warping (DTW) clustering to delineate precipitation-coherent climatic zones; and (iii) state-conditional Regular Vine copulas with Generalized Pareto (GPD) tails to model residual spatial dependence and extremes. The analysis employs the 0.05° daily CR2MET precipitation product over continental Chile (462 grid points, May–August 1980–2021) together with large-scale atmospheric covariates including the Southern Oscillation Index (SOI), the Oceanic Niño Index (ONI), and Global Mean Sea-Surface Temperature (GMSST).
+The shipped processed CSV includes precomputed regime and zone assignments (`States`, `labels`, `medoids`). The main R script fits conditional station margins and vine copulas on these processed inputs, runs 2022 MJJA simulations, calculates diagnostics and scoring metrics, and exports figures and tables.
 
-Five physically consistent rainfall regimes emerge, spanning from an anticyclonic dry state to a cyclonic wet state, confirmed by composites of mean sea-level pressure, 850-hPa winds, and 500-hPa geopotential height. Mixed-effects inference on the transition matrix reveals a statistically significant decline in wet-state persistence of ~0.34% yr⁻¹ (≈14.5% over 1980–2022), coincident with rising GMSST. Out-of-sample ensembles for 2022 (100 daily members conditioned on Viterbi states) are well calibrated: central 90% prediction intervals achieve near-nominal coverage, low asymmetry, and widths increasing southward with climatological variance.
-
-By disentangling regime timing and drivers from residual spatial co-variability and extremes, the proposed nHMM–DTW–vine–GPD framework yields meteorologically coherent states, spatially consistent probabilistic simulations, and quantitatively validated forecasts. The method is computationally tractable and transferable, offering a principled pathway for regime-conditioned, uncertainty-aware precipitation prediction to support hydroclimate risk management in Chile and other topographically complex regions.
-
----
+**Important limitation:** this is a *processed-data simulation/validation archive*, not a complete raw-data workflow rebuilding the upstream nHMM regime estimation, atmospheric covariate construction, and DTW clustering from their original sources. The script has not been independently rerun in a clean environment as part of this metadata/pre-release preparation. Users should report any runtime or data-compatibility issues.
 
 ## Repository structure
 
-Hybrid_Hidden_Markov–Copula_Framework/
-├── Data/
-│ └── mapa_estaciones_precipitaciones_clean.csv.zip (~34 MB, compressed; ~244 MB unzipped)
-├── Scripts/
-│ ├── Hybrid_nHMM_Copula_Simulation_Validation_2022.R
-│ └── (other R helpers, if applicable)
-├── (generated on first run)
-│ ├── fig_main/
-│ └── fig_supp/
-├── README.md
-└── .gitignore
+~~~text
+Data/
+  mapa_estaciones_precipitaciones_clean.csv.zip
+Scripts/
+  Hybrid_nHMM_Copula_Simulation_Validation_2022.R
+README.md
+CITATION.cff
+LICENSE
+LICENSES.md
+.gitignore
+~~~
 
-- **Data/** contains a single compressed CSV (`.zip`). The uncompressed file is large (~244 MB) and **is not committed** to the repository.
-- **Scripts/** contains the main R script to reproduce the 2022 MJJA validation runs, GoF diagnostics, multivariate scoring, and figure/table exports.
+The input archive is approximately 34 MB compressed. It expands to a large CSV (approximately 244 MB according to the original project documentation); allow adequate disk space and RAM.
 
----
+Outputs are written to `fig_main/`, `fig_supp/`, and in some cases `supp_figures/`. Generated files and the extracted CSV are ignored by Git.
 
-## Data dictionary (columns)
+## How to run
 
-The dataset contains the following variables:
+1. Install **R 4.2 or later** and a suitable CRAN mirror. Clone the repository and open a terminal in its root directory.
+2. Install the required R packages before running the script (the script also uses `pacman::p_load` to load packages).
+3. Run the main script **from the repository root**. Do not set an absolute local path inside the script.
 
-- `year`, `month`, `day`, `dates`: date fields (daily)
-- `location`: auxiliary location ID
-- `precipitation`: daily precipitation (mm)
-- `codigo_estacion`: official station ID
-- `z`: altitude (m)
-- `x`, `y`: longitude, latitude
-- `labels`: DTW-cluster/zone label
-- `medoids`: binary flag (1 if station is the medoid of its cluster)
-- `States`: hidden state for that day (0–4)
-- `Year`: year (duplicated, convenience field)
-- `year1980`: integer count since first date with records (baseline 1980)
+~~~bash
+git clone https://github.com/mauricio-herrera/hybrid-nhmm-copula-precipitation-framework.git
+cd hybrid-nhmm-copula-precipitation-framework
 
----
+Rscript -e 'install.packages(c("pacman","dplyr","tidyr","purrr","tibble","data.table","lubridate","ggplot2","stringr","VineCopula","copula","evd","goftest","ADGofTest","scoringRules","forecast","readr","patchwork"))'
 
-## How to run (paths, decompression, outputs)
+Rscript Scripts/Hybrid_nHMM_Copula_Simulation_Validation_2022.R
+~~~
 
-1. **Clone the repo and open R** (R ≥ 4.2 recommended).
-2. **Set the project root** to the repository folder. We recommend using the [`here`](https://CRAN.R-project.org/package=here) package to avoid hard-coded absolute paths.
-3. **Ensure the compressed data exists** at `Data/mapa_estaciones_precipitaciones_clean.csv.zip`.
-4. **First run** will:
-   - Unzip the CSV (≈244 MB) to `Data/mapa_estaciones_precipitaciones_clean.csv` (ignored by Git).
-   - Create `fig_main/` and `fig_supp/` if not present.
-   - Generate main figures and supplement tables/CSVs into those folders.
+The script detects `Data/mapa_estaciones_precipitaciones_clean.csv.zip`, extracts its CSV if needed, and reads `Data/mapa_estaciones_precipitaciones_clean.csv`. Running outside the repository root gives an explicit diagnostic. The full simulation is potentially computationally demanding.
 
-### Minimal path configuration (copy into the top of your R script)
+The main script contains multiple analysis sections and repeated initialization to support legacy checks; its numerical implementation is preserved aside from the two input-path initialization blocks. Figures, diagnostics, and tables may require substantial CPU time and memory.
 
-```r
-# ---------------- Path configuration ----------------
-# Use 'here' to anchor paths at the project root:
-if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
-library(here)
+## Input data dictionary
 
-data_dir <- here::here("Data")
-zip_path <- file.path(data_dir, "mapa_estaciones_precipitaciones_clean.csv.zip")
-csv_path <- file.path(data_dir, "mapa_estaciones_precipitaciones_clean.csv")
+The accompanying CSV is described in the manuscript/project documentation as containing:
 
-# Decompress if needed (CSV is ~244 MB; ZIP is ~34 MB)
-if (!file.exists(csv_path)) {
-  message("Unzipping dataset... (this may take a moment)")
-  utils::unzip(zipfile = zip_path, exdir = data_dir, overwrite = TRUE)
-  stopifnot(file.exists(csv_path))
-}
+| Column | Interpretation |
+|---|---|
+| `dates`, `year`, `month`, `day`, `Year` | Dates and calendar fields |
+| `codigo_estacion`, `location` | Station and auxiliary location identifiers |
+| `precipitation` | Daily precipitation (mm) |
+| `x`, `y`, `z` | Coordinates and altitude |
+| `labels` | Precomputed precipitation-zone assignment |
+| `medoids` | DTW-cluster medoid flag |
+| `States` | Precomputed hidden rainfall state |
+| `year1980` | Historical-time index |
 
-# Read CSV (use readr for speed)
-if (!requireNamespace("readr", quietly = TRUE)) install.packages("readr")
-datos_base_l <- readr::read_csv(csv_path, progress = TRUE)
-# ----------------------------------------------------
-If you move the dataset elsewhere, simply change data_dir and zip_path / csv_path accordingly.
-Do not hard-code absolute paths (e.g., /Users/<user>/...) in the committed script; keep them relative to the repo root.
-Software requirements (R)
+The actual data archive has not been independently decompressed or audited as part of this metadata update; confirm its schema if the script raises a column-name error.
 
-The scripts use the following packages (install on first use):
+The training window in the script ends **2021-08-31**, the target year is **2022**, and the validation months are **May–August**. The default `selected_zone` is 5 and `M_per_day` is 100, with random seeds specified in the code.
 
-Data & pipes: dplyr, tidyr, purrr, tibble, data.table, stringr, lubridate, readr
+## Source-data attribution
 
-Plotting: ggplot2, patchwork
+The manuscript identifies **CR2MET** as the gridded precipitation source. Please acknowledge:
 
-Copulas & extremes: VineCopula, copula, evd
+Boisier, Juan P. (2023). *CR2MET: A high-resolution precipitation and temperature dataset for the period 1960–2021 in continental Chile* (v2.5) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.7529682
 
-Scoring & tests: scoringRules, forecast, goftest, ADGofTest
+CR2 source: https://www.cr2.cl/datos-productos-grillados/
 
-Parallel: parallel
+CR2MET is published with Creative Commons 4.0 licensing information. Source-data and downstream derivative rights are distinct from the MIT software license. See [LICENSES.md](LICENSES.md) for usage and attribution notes. Confirm the provenance and redistribution rights for every additional derived input before republishing the data.
 
-Utilities: pacman (optional), here (paths)
+## Citation and archival releases
 
-You can bootstrap with:
-pkgs <- c(
-  "dplyr","tidyr","purrr","tibble","data.table","stringr","lubridate","readr",
-  "ggplot2","patchwork",
-  "VineCopula","copula","evd",
-  "scoringRules","forecast","goftest","ADGofTest",
-  "parallel","here","pacman"
-)
-to_install <- pkgs[!pkgs %in% installed.packages()[,1]]
-if (length(to_install)) install.packages(to_install)
-Reproducible workflow
+GitHub's **Cite this repository** action uses [CITATION.cff](CITATION.cff). The initial archive is intended to be created from a **GitHub Release tagged `v1.0.0`**, after the Zenodo–GitHub integration is enabled. Zenodo will then provide a version-specific DOI and an all-versions DOI.
 
-Load data (unzips on first run).
+Do not add an invented DOI before Zenodo processes the release.
 
-Train margins by state and station (zero-inflated + ECDF body + GPD tail).
+## License
 
-Build U-matrices per state (train) and fit R-vine copulas (state-conditional).
-
-Diagnostics: PIT (univariate & Rosenblatt), White tests on Tree-1 pairs.
-
-Simulation (2022 MJJA): state-conditioned daily ensembles (vine vs independence).
-
-Verification: ES/VS, areal-CRPS, Brier events (≥k wet, joint exceedances), DM tests.
-
-Exports: figures to fig_main/ (paper) and fig_supp/ (supplement), CSV tables to fig_supp/.
-
-Outputs
-
-Main figures: fig_main/ (publication panels).
-
-Supplement figures & CSVs: fig_supp/ (PIT panels, ES/VS/CRPSA gains, Brier gains, GoF summaries).
-
-The exact filenames are created by the script; they follow the manuscript’s S-section naming.
-
-
+Original software: MIT; see [LICENSE](LICENSE). The dataset and any third-party-derived material require their own attribution and license assessment; see [LICENSES.md](LICENSES.md).
