@@ -6,15 +6,38 @@
 ## Simulation for 2022 (MJJA), diagnostics (PIT, Rosenblatt, pairwise GoF), and monthly validation.    ##
 ## Author: (MAURICIO HERRERA-MARÍN)                                                                                       ##
 ##########################################################################################################
-## (Set your working directory to a generic, user-editable path)
-## Replace the placeholder below with your local path before running.
-# setwd("/path/to/your/project")
-base_path <- "/path/to/your/project"                    # <-- EDIT HERE
-setwd(base_path)
-
-## Example input CSV (station metadata / map). Adjust to your file name if needed.
-stations_csv_path <- file.path(base_path, "mapa_estaciones_precipitaciones.csv")
-stations_csv_path
+## Run from the repository root, e.g.:
+## Rscript Scripts/Hybrid_nHMM_Copula_Simulation_Validation_2022.R
+## The input CSV is shipped inside the ZIP under Data/.
+base_path <- normalizePath(getwd(), mustWork = TRUE)
+data_dir <- file.path(base_path, "Data")
+data_zip_path <- file.path(data_dir, "mapa_estaciones_precipitaciones_clean.csv.zip")
+stations_csv_path <- file.path(data_dir, "mapa_estaciones_precipitaciones_clean.csv")
+if (!dir.exists(data_dir)) {
+  stop("Data/ not found. Run the script from the root of the GitHub repository.")
+}
+if (!file.exists(stations_csv_path)) {
+  if (!file.exists(data_zip_path)) {
+    stop("Missing input ZIP: ", data_zip_path)
+  }
+  zip_entries <- utils::unzip(data_zip_path, list = TRUE)$Name
+  csv_entries <- zip_entries[grepl("\\.csv$", zip_entries, ignore.case = TRUE)]
+  if (length(csv_entries) != 1L) {
+    stop("Expected exactly one CSV in ", data_zip_path,
+         "; found ", length(csv_entries), ". Check the archive manually.")
+  }
+  utils::unzip(data_zip_path, files = csv_entries, exdir = data_dir,
+               junkpaths = TRUE, overwrite = FALSE)
+  extracted_csv <- file.path(data_dir, basename(csv_entries))
+  if (!file.exists(stations_csv_path) && file.exists(extracted_csv)) {
+    if (!file.copy(extracted_csv, stations_csv_path)) {
+      stop("Unable to copy extracted CSV to expected filename: ", stations_csv_path)
+    }
+  }
+}
+if (!file.exists(stations_csv_path)) {
+  stop("Input CSV was not found after extraction: ", stations_csv_path)
+}
 datos_base_l <- read.csv(stations_csv_path)
 
 ## ------------------------------ Libraries -------------------------------------------------------------
@@ -837,15 +860,38 @@ if (exists("scores_mv")) {
 
 ## ============================== 0) Setup & Libraries ===================================================
 
-## (Set your working directory to a generic, user-editable path)
-## Replace the placeholder below with your local path before running.
-# setwd("/path/to/your/project")
-base_path <- "/path/to/your/project"                    # <-- EDIT HERE
-setwd(base_path)
-
-## Example input CSV (station metadata / map). Adjust to your file name if needed.
-stations_csv_path <- file.path(base_path, "mapa_estaciones_precipitaciones.csv")
-stations_csv_path
+## Run from the repository root, e.g.:
+## Rscript Scripts/Hybrid_nHMM_Copula_Simulation_Validation_2022.R
+## The input CSV is shipped inside the ZIP under Data/.
+base_path <- normalizePath(getwd(), mustWork = TRUE)
+data_dir <- file.path(base_path, "Data")
+data_zip_path <- file.path(data_dir, "mapa_estaciones_precipitaciones_clean.csv.zip")
+stations_csv_path <- file.path(data_dir, "mapa_estaciones_precipitaciones_clean.csv")
+if (!dir.exists(data_dir)) {
+  stop("Data/ not found. Run the script from the root of the GitHub repository.")
+}
+if (!file.exists(stations_csv_path)) {
+  if (!file.exists(data_zip_path)) {
+    stop("Missing input ZIP: ", data_zip_path)
+  }
+  zip_entries <- utils::unzip(data_zip_path, list = TRUE)$Name
+  csv_entries <- zip_entries[grepl("\\.csv$", zip_entries, ignore.case = TRUE)]
+  if (length(csv_entries) != 1L) {
+    stop("Expected exactly one CSV in ", data_zip_path,
+         "; found ", length(csv_entries), ". Check the archive manually.")
+  }
+  utils::unzip(data_zip_path, files = csv_entries, exdir = data_dir,
+               junkpaths = TRUE, overwrite = FALSE)
+  extracted_csv <- file.path(data_dir, basename(csv_entries))
+  if (!file.exists(stations_csv_path) && file.exists(extracted_csv)) {
+    if (!file.copy(extracted_csv, stations_csv_path)) {
+      stop("Unable to copy extracted CSV to expected filename: ", stations_csv_path)
+    }
+  }
+}
+if (!file.exists(stations_csv_path)) {
+  stop("Input CSV was not found after extraction: ", stations_csv_path)
+}
 datos_base_l <- read.csv(stations_csv_path)
 
 ## Packages
