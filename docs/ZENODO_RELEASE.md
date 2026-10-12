@@ -1,6 +1,8 @@
-# GitHub → Zenodo: first software release
+# GitHub → Zenodo: first software release — completed 2026-10-12
 
-This repository is already enabled in the author's Zenodo GitHub integration (confirmed by author screenshot on 2026-10-12).
+**Published:** GitHub release [v1.0.0](https://github.com/mauricio-herrera/hybrid-nhmm-copula-precipitation-framework/releases/tag/v1.0.0) was archived automatically by Zenodo on 12 October 2026. The Zenodo integration screen shows **DOI [10.5281/zenodo.23322615](https://doi.org/10.5281/zenodo.23322615)** with status **Published**. The Git tag points to commit `9ff10ebc5040aa31b9e7e8c0fed1964ba74d08d6`.
+
+The steps below describe the procedure used, for future reference. **Do not repeat these steps for v1.0.0**; create a new version tag for any future archive.
 
 1. Before publication, verify the input dataset's redistribution/attribution requirements. See [LICENSES.md](../LICENSES.md). Do not assume the MIT software license grants rights over third-party data.
 2. Confirm that `CITATION.cff` has the correct author, version `1.0.0`, and **actual** release date. The currently prepared date is 2026-10-12; update it if you publish on a different date.
@@ -8,7 +10,7 @@ This repository is already enabled in the author's Zenodo GitHub integration (co
 4. Create tag **v1.0.0** from branch **main**. Use the title **Hybrid nHMM–Copula Precipitation Framework v1.0.0**. Do not mark it as a prerelease.
 5. Publish the release. Do not separately create a manual Zenodo deposit: with the repository enabled, Zenodo should automatically archive the GitHub release.
 6. Go to **Zenodo → GitHub**, check the archiving status, inspect the Zenodo record, and copy both DOI values (version and all-versions).
-7. Add the **confirmed** DOI to `CITATION.cff`, README, and (optionally) a DOI badge in a follow-up commit. This post-release commit does not retroactively change the archived v1.0.0 snapshot.
+7. The confirmed DOI has been added to `CITATION.cff` and the README, with a DOI badge. This post-release commit does not retroactively change the archived v1.0.0 snapshot.
 
 Suggested release notes:
 
