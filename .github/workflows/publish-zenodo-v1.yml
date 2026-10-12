@@ -1,0 +1,46 @@
+name: Publish v1.0.0 software release for Zenodo
+
+# One-time workflow: only the addition/change of this exact file on main
+# can trigger it. If a v1.0.0 release already exists, it does nothing.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/publish-zenodo-v1.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create GitHub release v1.0.0
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if gh release view v1.0.0 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release v1.0.0 exists; no changes made."
+            exit 0
+          fi
+          cat >release-notes.md <<'NOTES'
+          Initial public software and processed-data release supporting the manuscript
+          "Characterizing Climate-Driven Shifts in Chilean Rainfall Regimes with a
+          Hybrid Hidden Markov–Copula Framework."
+
+          Includes the R implementation of 2022 MJJA rainfall simulation and
+          validation based on processed CR2MET-related precipitation data, with
+          precomputed Hidden Markov states and DTW zone labels.
+
+          The archive is intended for analysis reproducibility; it is not a
+          complete rebuilding pipeline for upstream nHMM/DTW preprocessing.
+          Read LICENSES.md for software and data attribution and licensing.
+          NOTES
+          gh release create v1.0.0 \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Hybrid nHMM–Copula Precipitation Framework v1.0.0" \
+            --notes-file release-notes.md \
+            --latest
