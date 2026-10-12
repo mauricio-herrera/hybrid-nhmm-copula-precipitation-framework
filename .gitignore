@@ -1,1 +1,28 @@
+# R session / IDE artifacts
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+.Renviron
+.Rprofile
+*.Rproj.user/
 .DS_Store
+.idea/
+.vscode/
+
+# Derived large data and intermediate results (keep tracked Data/*.zip)
+Data/*.csv
+Data/*.rds
+Data/*.RData
+Data/*.rda
+Data/*.feather
+Data/*.parquet
+
+# Generated graphics and tables
+fig_main/
+fig_supp/
+supp_figures/
+
+# Temporary files
+*.tmp
+*~
