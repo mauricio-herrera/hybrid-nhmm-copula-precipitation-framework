@@ -1,12 +1,14 @@
 # Hybrid Hidden Markov–Copula Framework for Chilean Rainfall (1980–2022)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23322615.svg)](https://doi.org/10.5281/zenodo.23322615)
+
 Research software and processed precipitation input for the manuscript:
 
 > **Characterizing Climate-Driven Shifts in Chilean Rainfall Regimes with a Hybrid Hidden Markov–Copula Framework**
 
 This repository provides an R implementation for state-conditional precipitation simulation and out-of-sample validation during May–August 2022. The scientific framework couples non-homogeneous Hidden Markov Model (nHMM) precipitation regimes, Dynamic Time Warping (DTW) climatic zones, zero-inflated empirical/GPD station margins, and regular vine copulas.
 
-**Release status:** prepared for GitHub/Zenodo release **v1.0.0**. A DOI will be added here **after** the first GitHub release has been archived by Zenodo; no DOI has been assigned to this repository yet.
+**Archived release:** GitHub [v1.0.0](https://github.com/mauricio-herrera/hybrid-nhmm-copula-precipitation-framework/releases/tag/v1.0.0), published on 12 October 2026 and archived by Zenodo at **[DOI: 10.5281/zenodo.23322615](https://doi.org/10.5281/zenodo.23322615)**. This DOI identifies the initial software/data snapshot; subsequent changes to the `main` branch do not alter that archived release.
 
 ## Reproducibility scope
 
@@ -82,9 +84,11 @@ CR2MET is published with Creative Commons 4.0 licensing information. Source-data
 
 ## Citation and archival releases
 
-GitHub's **Cite this repository** action uses [CITATION.cff](CITATION.cff). The initial archive is intended to be created from a **GitHub Release tagged `v1.0.0`**, after the Zenodo–GitHub integration is enabled. Zenodo will then provide a version-specific DOI and an all-versions DOI.
+GitHub's **Cite this repository** action uses [CITATION.cff](CITATION.cff). The first public version was archived via the GitHub–Zenodo integration on 12 October 2026.
 
-Do not add an invented DOI before Zenodo processes the release.
+**Citation:** Herrera-Marín, M. (2026). *Hybrid Hidden Markov–Copula Precipitation Framework* (Version 1.0.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.23322615
+
+For reproducibility of the first release, use its immutable [GitHub tag](https://github.com/mauricio-herrera/hybrid-nhmm-copula-precipitation-framework/tree/v1.0.0) rather than assuming that the latest `main` matches the frozen Zenodo archive. See [docs/ZENODO_RELEASE.md](docs/ZENODO_RELEASE.md) for archival provenance.
 
 ## License
 
